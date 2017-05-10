@@ -17,6 +17,7 @@
 #include <sstream>
 #include <algorithm>
 #include <unordered_map>
+#include "nchoosek.h"
 
 using namespace std;
 bool isPrime(int number){
@@ -30,7 +31,6 @@ bool isPrime(int number){
     return true;
 }
 
-unordered_map<int, bool> primeMap;
 
 bool check(int a, int b){
     ostringstream oss;
@@ -41,9 +41,6 @@ bool check(int a, int b){
     int c;
 
     iss >> c;
-    /*if(c<10000){
-        return primeMap.at(c);
-    }*/
     return isPrime(c);
 }
 
@@ -59,77 +56,25 @@ bool valid(vector<int> perm){
     return true;
 }
 
-void recurse(vector<int> primes, vector<int> perm){
-    if(perm.size()>4){
-        for(int i = 0;i<5;i++){
-            cout << perm[i] << ", ";
-        }
-        cout << endl;
-    }
-    for(std::vector<int>::iterator it = primes.begin(); it != primes.end(); ++it) {
-        perm.push_back(*it);
-        if(valid(perm)){
-            recurse(vector<int>(++it, primes.end()), perm);
-        }
-        perm.pop_back();
-    }
-}
 
 
-
-/*
- * 
- */
 int main(int argc, char** argv) {
     
     vector<int> primes;
     for(int i = 3;i<10000;i++){
         if(isPrime(i)){
             primes.push_back(i);
-            primeMap.insert(pair<int,bool>(i, true));
-
-        }
-        else{
-            primeMap.insert(pair<int,bool>(i, false));
         }
     }
-   
-
-                
-    
    
     vector<int> perm;
     vector<int>::iterator it = primes.begin();
-//    vector<auto> itStack;
-//    itStack.push_back(primes.begin());
     //13, 5197, 5701, 6733, 8389, 
-    //recurse(primes, perm);
-    while(perm.size()<5){
-        if(it==primes.end()){
-            it = std::find(primes.begin(), primes.end(), perm[perm.size()-1]);
-            it++;
-            perm.pop_back();
-        }
-        while(it!=primes.end()){
-            
-        
-            perm.push_back(*it);
-            if(valid(perm)){
-                ++it;
-                break;
-            }
-            perm.pop_back();
-            it++;
-        }
-        
-    }
+    perm = n_choose_k(primes, 5, &valid);
     for(int i = 0;i<5;i++){
         cout << perm[i] << ", ";
     }
     cout << endl;
     
-    
-
     return 0;
 }
-
