@@ -7,3 +7,5 @@ bin/*
 
 # Ignore Netbeans project folder
 nbproject/*
+
+*.out

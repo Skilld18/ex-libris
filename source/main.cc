@@ -52,8 +52,9 @@ int main(int argc, char** argv) {
     }
    
     vector<int> perm;
+    vector<vector<int>::iterator> stack;
     //13, 5197, 5701, 6733, 8389, 
-    perm = n_choose_k(primes, 5, &valid);
+    perm = n_choose_k(primes, stack, 5, &valid);
     for(int i = 0;i<5;i++){
         cout << perm[i] << ", ";
     }
