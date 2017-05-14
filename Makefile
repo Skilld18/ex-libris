@@ -1,2 +1,2 @@
 all:
-	g++ source/*.cc 
+	g++ source/*.cc -g

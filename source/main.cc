@@ -1,16 +1,3 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
-
-/* 
- * File:   main.cpp
- * Author: rdunk
- *
- * Created on May 6, 2017, 11:20 AM
- */
-
 #include <cstdlib>
 #include <iostream>
 #include <vector>
@@ -21,7 +8,6 @@
 
 using namespace std;
 bool isPrime(int number){
-
     if(number < 2) return false;
     if(number == 2) return true;
     if(number % 2 == 0) return false;
@@ -34,9 +20,7 @@ bool isPrime(int number){
 
 bool check(int a, int b){
     ostringstream oss;
-
     oss << a << b;
-
     istringstream iss(oss.str());
     int c;
 
@@ -68,7 +52,6 @@ int main(int argc, char** argv) {
     }
    
     vector<int> perm;
-    vector<int>::iterator it = primes.begin();
     //13, 5197, 5701, 6733, 8389, 
     perm = n_choose_k(primes, 5, &valid);
     for(int i = 0;i<5;i++){

@@ -4,6 +4,7 @@
 
 using namespace std;
 template <typename T, typename A>
+//vector<T,A> n_choose_k(vector<T,A> n, vector<typename vector<T,A>::iterator> stack, int k, bool (*valid)(vector<T,A> data)) {
 vector<T,A> n_choose_k(vector<T,A> n, int k, bool (*valid)(vector<T,A> data)) {
     typename vector<T,A>::iterator it = n.begin();
     vector<T,A> result;
