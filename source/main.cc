@@ -2,24 +2,22 @@
 #include <iostream>
 #include <vector>
 #include <sstream>
-#include <algorithm>
+#include <algorithm> 
 #include <unordered_map>
 #include "nchoosek.h"
 
 using namespace std;
 bool isPrime(int number){
-    if(number < 2) return false;
     if(number == 2) return true;
-    if(number % 2 == 0) return false;
-    for(int i=3; (i*i)<=number; i+=2){
+    if(number % 2 == 0) return false; 
+	for(int i=3; (i*i)<=number; i+=2){
         if(number % i == 0 ) return false;
-    }
-    return true;
+    } 
+	return true;
 }
 
 
-bool check(int a, int b){
-    ostringstream oss;
+bool check(int a, int b){ ostringstream oss;
     oss << a << b;
     istringstream iss(oss.str());
     int c;
@@ -29,10 +27,10 @@ bool check(int a, int b){
 }
 
 
-bool valid(vector<int> perm){
-    for(auto const& a: perm) {
-        for(auto const& b: perm) {
-            if(a!=b && !check(a,b)){
+bool valid(vector<vector<int>::iterator>  stack){
+    for(auto const& a: stack) {
+        for(auto const& b: stack) {
+            if(a!=b && !check(*a,*b)){
                 return false;
             }
         }
@@ -42,23 +40,33 @@ bool valid(vector<int> perm){
 
 
 
-int main(int argc, char** argv) {
-    
-    vector<int> primes;
+int main(void) {
+    vector<int> n;
     for(int i = 3;i<10000;i++){
         if(isPrime(i)){
-            primes.push_back(i);
+            n.push_back(i);
         }
     }
    
     vector<int> perm;
-    vector<vector<int>::iterator> stack;
+    vector<vector<int>::iterator>  stack;
+	size_t k = 6;
     //13, 5197, 5701, 6733, 8389, 
-    perm = n_choose_k(primes, stack, 5, &valid);
-    for(int i = 0;i<5;i++){
-        cout << perm[i] << ", ";
-    }
-    cout << endl;
-    
+	n_choose_k(&n, &stack, k, &valid);
+	for(size_t i = 0;i<stack.size();i++){
+		cout << *stack[i] << ", ";
+	}
+	cout << endl;
+	n_choose_k(&n, &stack, k, &valid);
+	for(size_t i = 0;i<stack.size();i++){
+		cout << *stack[i] << ", ";
+	}
+	cout << endl;
+	n_choose_k(&n, &stack, k, &valid);
+	for(size_t i = 0;i<stack.size();i++){
+		cout << *stack[i] << ", ";
+	}
+	cout << endl;
+
     return 0;
 }
