@@ -38,6 +38,9 @@ bool valid(vector<vector<int>::iterator>  stack){
     return true;
 }
 
+bool complete(vector<vector<int>::iterator>  stack){
+	return stack.size() == 5 && valid(stack);
+}
 
 
 int main(void) {
@@ -50,23 +53,18 @@ int main(void) {
    
     vector<int> perm;
     vector<vector<int>::iterator>  stack;
-	size_t k = 6;
+
+	while(true){
     //13, 5197, 5701, 6733, 8389, 
-	n_choose_k(&n, &stack, k, &valid);
+	n_choose_k(&n, &stack, &valid, &complete);
 	for(size_t i = 0;i<stack.size();i++){
 		cout << *stack[i] << ", ";
 	}
 	cout << endl;
-	n_choose_k(&n, &stack, k, &valid);
-	for(size_t i = 0;i<stack.size();i++){
-		cout << *stack[i] << ", ";
+        if(stack.size() <1){
+            break;
+        }
 	}
-	cout << endl;
-	n_choose_k(&n, &stack, k, &valid);
-	for(size_t i = 0;i<stack.size();i++){
-		cout << *stack[i] << ", ";
-	}
-	cout << endl;
 
     return 0;
 }
