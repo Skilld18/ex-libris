@@ -38,33 +38,46 @@ bool valid(vector<vector<int>::iterator>  stack){
     return true;
 }
 
+bool val(vector<vector<int>::iterator>  stack){
+    return true;
+}
+
 bool complete(vector<vector<int>::iterator>  stack){
 	return stack.size() == 5 && valid(stack);
 }
+bool comp(vector<vector<int>::iterator>  stack){
+    return stack.size() == 3 && val(stack);
+}
+
 
 
 int main(void) {
     vector<int> n;
+    vector<vector<int>::iterator>  stack;
+
+
     for(int i = 3;i<10000;i++){
         if(isPrime(i)){
             n.push_back(i);
         }
     }
-   
-    vector<int> perm;
-    vector<vector<int>::iterator>  stack;
-
-	while(true){
-    //13, 5197, 5701, 6733, 8389, 
-	n_choose_k(&n, &stack, &valid, &complete);
+    //13, 5197, 5701, 6733, 8389,
+	n_choose_k(&n, &stack, &valid, &complete, false);
 	for(size_t i = 0;i<stack.size();i++){
 		cout << *stack[i] << ", ";
 	}
 	cout << endl;
-        if(stack.size() <1){
-            break;
+    n.clear();
+    for(int i = 1;i<6;i++){
+        n.push_back(i);
+    }
+    stack.clear();
+    do {
+    n_choose_k(&n, &stack, &val, &comp, false);
+        for(size_t i = 0;i<stack.size();i++){
+            cout << *stack[i] << ", ";
         }
-	}
-
+    cout << endl;
+    }while(!stack.empty());
     return 0;
 }
