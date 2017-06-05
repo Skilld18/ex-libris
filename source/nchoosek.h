@@ -1,55 +1,70 @@
-#include <vector>
-#include <iostream>
-#include <algorithm>
+#include <vector>   
+#include <algorithm>   
+#include <sstream>   
+#include <functional>
 
 
-using namespace std;
-template<typename T, typename A>
-bool at_end(vector<T,A> * n, vector<typename vector<T, A>::iterator> *stack){
-    for (int i = 0; n->end() - stack->back() <= i + 1; i++) {
-        if (stack->size() == 1) {
-            stack->clear();
-            return true;
-        }
-        stack->pop_back();
-    }
-    return false;
-}
 
-/** Iterative n choose k algorithm that fills up a sta **/
-template<typename T, typename A>
-void n_choose_k(
-        vector<T, A> *n,
-        vector<typename vector<T, A>::iterator> *stack,
-        bool (*valid)(vector<typename vector<T, A>::iterator> data),
-        bool (*complete)(vector<typename vector<T, A>::iterator> data),
-        //Allows duplicate elements of n
-        bool duplicates) {
+/// @brief An iterative algorithm to generate n choose k combinations   
+/// @param n - Vector of possible values that n be chosen from   
+/** @param valid - A check to see if a partial combination is valid   
+ * For a typical n choose k any partial combination is valid*/   
+///@param complete - A check to see if a given combination is fully vaild   
+/**@param stack - A variable that holds the current combination. The function   
+ * can be called again with the updated stack to get the next combination*/   
+template<typename Collection,
+         typename Subset = std::vector<typename Collection::const_iterator>,
+         typename Predicate1 = std::function<bool(const Subset&)>,
+         typename Predicate2 = std::function<bool(const Subset&)>>
+void n_choose_k(Collection * n,
+                Predicate1 valid,
+                Predicate2 complete,
+                Subset* stack){
 
-    //if this is the first time this is getting called load up the stack with the start of n
-    if (stack->size() < 1) {
-        stack->push_back(n->begin());
-    } else {
-        if(at_end(n, stack)){
-            return;
-        }
-        stack->back()++;
-    }
+    bool firstCall= true;   
 
-    while (!complete(*stack)) {
-        if (n->end() - stack->back() <= 1 ) {
-            if(at_end(n, stack)){
-                return;
-            }
-            stack->back()++;
-        }
-        if (valid(*stack)) {
-            stack->push_back(stack->back());
-        }
+    //The first time this gets called we need to populate the stack   
+    //On subsequent calls the flag remains set so that the stack advances and doesn't return a duplicate combination   
+    if (stack->size() < 1) {   
+        stack->push_back(n->begin());   
+        firstCall= false;   
+    }   
 
-        if (!duplicates) {
-            stack->back()++;
-        }
-    }
-}
+    //As soon as we find a complete combination fall through   
+    //complete in general means the combination is long enough(k) and that it is valid   
+    //for typical n choose k everything is valid   
+    while (!complete(*stack) || firstCall) {   
+        //If the last element is at the end of the n iterator or we've set the 2nd pass flag   
+        if (n->end() - stack->back() <= 1 || firstCall) {   
+            //iterate through the stack and either   
+            for (int i = 0; n->end() - stack->back() <= i + 1; i++) {   
+                //clear the stack and return if all possibilities have been exhausted   
+                if (stack->size() == 1) {   
+                    stack->clear();   
+                    return;   
+                }   
+                //or pop the last element of any stack that is a "conflict set"   
+                //that is any stack that couldn't possibly be complete   
+                //ie (1, 6, __) in (1,2,3,4,5,6) choose 3 as there is nothing   
+                //greater than 6 and the elements go in ascending order   
+                stack->pop_back();   
+            }   
+            //Advance to the next combination   
+            stack->back()++;   
 
+            //unset the flag and continue so we don't skip combinations   
+            if (firstCall) {   
+                firstCall= false;   
+                continue;   
+            }   
+        }   
+
+
+        //If the current partial combination(stack) is valid   
+        if (valid(*stack)) {   
+            stack->push_back(stack->back());   
+        }   
+        //And advance to the next combination   
+        ++stack->back();
+    }   
+}   
